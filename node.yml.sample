@@ -1,0 +1,28 @@
+base:
+  users:
+    YOUR_UESR_NAME:
+      github_user: YOUR_GITHUB_USER
+      groups: wheel
+      password: YOUR_PASSWORD
+
+  mailto:
+    root: YOUR_MAIL_ADDRESS
+
+gitlab:
+  external_url: https://YOURDOMAIN
+  gitlab_rails:
+    time_zone: "Asia/Tokyo"
+    omniauth_enabled: true
+    omniauth_allow_single_sign_on: true
+    omniauth_block_auto_created_users: true
+    omniauth_providers:
+      -
+        name: github
+        app_id: YOUR_CLIENT_ID
+        app_secret: YOUR_CLIENT_SECRET
+        url: https://github.com/
+        args: { scope: "user:email" }
+  nginx:
+    redirect_http_to_https: true
+    redirect_http_to_https_port: 80
+
