@@ -1,0 +1,17 @@
+set -eu
+
+: "Make bucket"
+s3cmd -c /etc/s3cmd/backup.cfg mb s3://<%= @config[:bucket] %>
+
+: "Download backups"
+s3cmd -c /etc/s3cmd/backup.cfg sync s3://<%= @config[:bucket] %>/ /var/opt/gitlab/backups/
+
+: "Backup Gitlab"
+/opt/gitlab/bin/gitlab-rake gitlab:backup:create
+
+: "Remove expired backups"
+find /var/opt/gitlab/backups/ -type f -name "*_gitlab_backup.tar" \
+  -daystart -mtime +<%= @config[:expire] %> | xargs rm -f
+
+: "Sync backups to object storage"
+s3cmd -c /etc/s3cmd/backup.cfg sync --delete-removed /var/opt/gitlab/backups/ s3://<%= @config[:bucket] %>/

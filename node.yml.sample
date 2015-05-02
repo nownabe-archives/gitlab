@@ -25,4 +25,8 @@ gitlab:
   nginx:
     redirect_http_to_https: true
     redirect_http_to_https_port: 80
-
+  backup:
+    access_key: YOUR_API_KEY
+    secret_key: YOUR_SECRET_KEY
+    bucket: YOUR_BUCKET
+    exipre: 7

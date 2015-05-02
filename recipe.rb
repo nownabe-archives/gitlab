@@ -74,3 +74,19 @@ template "/etc/gitlab/gitlab.rb" do
     nginx: node[:gitlab][:nginx] || {}
   )
 end
+
+# Backup
+package "s3cmd"
+
+directory "/etc/s3cmd"
+
+template "/etc/s3cmd/backup.cfg" do
+  source "templates/backup.cfg.erb"
+  variables(config: node[:gitlab][:backup])
+end
+
+template "/etc/cron.daily/gitlab-backup" do
+  source "templates/gitlab-backup.erb"
+  mode "0755"
+  variables(config: node[:gitlab][:backup])
+end
